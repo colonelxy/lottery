@@ -22,6 +22,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.24;
 
+import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
+
+import {VRFConsumerBaseV2} from "chainlink/src/v0.8/vrf/VRFConsumerBaseV2.sol";
+
 /**
  * @title A sample Raffle contract
  * @author Harold

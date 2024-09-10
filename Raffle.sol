@@ -44,7 +44,7 @@ contract Raffle {
     constructor(uint256 entranceFee, uint256 interval) {
         i_entranceFee = entranceFee;
         i_interval = interval;
-        s_lastTimeStamp= block.timestamp;
+        s_lastTimeStamp = block.timestamp;
     }
 
     function enterRaffle() external payable {
@@ -57,21 +57,34 @@ contract Raffle {
         s_players.push(payable(msg.sender));
         emit RaffleEntered(msg.sender);
     }
-    
 
     function pickWinner() external {
-        // 1. Get random number 
-        // 2. Use the random numbe to pick a player 
-        // 3. Make all these processes automatic 
+        // 1. Get random number
+        // 2. Use the random numbe to pick a player
+        // 3. Make all these processes automatic
 
         // Start
-        // Check to see if enough time has lapsed since the last raffle 
-        if((block.timestamp - s_lastTimeStamp) < i_interval) {
-            revert()
+        // Check to see if enough time has lapsed since the last raffle
+        if ((block.timestamp - s_lastTimeStamp) < i_interval) {
+            revert();
         }
+        // If enough time has lapsed then:
+        // 1. request the random number
+        // 2. get the random number
 
-
-
+        requestId = s_vrfCoordinator.requestRandomWords(
+            VRFV2PlusClient.RandomWordRequest({
+                keyHash: s_keyHash,
+                subId: s_subscriptionId,
+                requestConfirmations: requestConfirmations,
+                callbackGasLimit: callbackGasLimit,
+                numWords: numWords,
+                extraArgs: VRFV2PlusClient._argsToBytes(
+                    // set nativePayment to true to pay for VRF requests with Sepolia instead of
+                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+                )
+            })
+        );
     }
 
     /**
